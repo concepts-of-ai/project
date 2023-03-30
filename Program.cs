@@ -6,7 +6,7 @@ internal class Program
     {
         while (true)
         {
-            var Board = new Board();
+            Board board;
             string? val;
             Console.Write("Enter Board: ");
             val = Console.ReadLine();
@@ -15,8 +15,11 @@ internal class Program
                 Console.WriteLine("==== Error: Reading null value");
                 break;
             }
-            Board.Set(val);
-            Console.WriteLine(Board.ToString());
+            board = new Board(val);
+            Console.WriteLine("Original: " + board);
+
+            var board2 = board.Copy();
+            Console.WriteLine("Copy: " + board2);
         }
     }
 }

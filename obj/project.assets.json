@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/eli/Desktop/part1/console-test.csproj",
+      "projectUniqueName": "/Users/eli/Desktop/ai-project/part1/console-test.csproj",
       "projectName": "console-test",
-      "projectPath": "/Users/eli/Desktop/part1/console-test.csproj",
+      "projectPath": "/Users/eli/Desktop/ai-project/part1/console-test.csproj",
       "packagesPath": "/Users/eli/.nuget/packages/",
-      "outputPath": "/Users/eli/Desktop/part1/obj/",
+      "outputPath": "/Users/eli/Desktop/ai-project/part1/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/eli/.nuget/NuGet/NuGet.Config"

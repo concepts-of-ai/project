@@ -20,14 +20,26 @@ class Board
     // array of two uint32 to hold board info
     uint[] board = new uint[2];
 
-    public Board()
+    public Board(string input)
     {
-        // initialize to empty board
         board[0] = 0;
         board[1] = 0;
+        SetBoard(input);
     }
 
-    public void Set(string input)
+    // copy contructor
+    private Board(Board input)  
+    {
+        board[0] = input.GetBlock(0);
+        board[1] = input.GetBlock(1);
+    }
+
+    public Board Copy()
+    {
+        return new Board(this);
+    }
+
+    public void SetBoard(string input)
     {
         for (int i = 0; i < input.Length; i++)
         {
@@ -36,7 +48,7 @@ class Board
         }
     }
 
-    override public String ToString()
+    public String GetBoard()
     {
         String result = "";
         for (int i = 0; i < TotalCapacity; i++)
@@ -46,28 +58,12 @@ class Board
         return result;
     }
 
-    uint GetBlock(int block)
+    public override string ToString()
     {
-        return board[block];
+        return this.GetBoard();
     }
 
-    void SetBlock(int block, uint val)
-    {
-        board[block] = val;
-    }
-
-    State GetPosition(int pos)
-    {
-        var (offset, block) = FindBlockAndOffset(pos);
-
-        // bitwise shift so that check bits line up with pos of block
-        uint tempBlock = GetBlock(block);   // get a copy of the block
-        tempBlock >>= offset;   // offset block so that position is lowest digits
-        uint checkResult = tempBlock & (int)State.Check;   // logic AND to get result
-        return (State)checkResult; // convert to State
-    }
-
-    void SetPosition(int pos, State state)
+    public void SetPosition(int pos, State state)
     {
         var (offset, block) = FindBlockAndOffset(pos);
         uint tempBlock = ClearPosition(offset, block);
@@ -80,13 +76,35 @@ class Board
         }
 
         // move the state you are setting to correct position
-        uint s = (uint) state << offset;
+        uint s = (uint)state << offset;
         // use logical OR to add it tempblock
         tempBlock = tempBlock | s;
         SetBlock(block, tempBlock);
     }
+
+    public State GetPosition(int pos)
+    {
+        var (offset, block) = FindBlockAndOffset(pos);
+
+        // bitwise shift so that check bits line up with pos of block
+        uint tempBlock = GetBlock(block);   // get a copy of the block
+        tempBlock >>= offset;   // offset block so that position is lowest digits
+        uint checkResult = tempBlock & (int)State.Check;   // logic AND to get result
+        return (State)checkResult; // convert to State
+    }
+
+    uint GetBlock(int block)
+    {
+        return board[block];
+    }
+
+    void SetBlock(int block, uint val)
+    {
+        board[block] = val;
+    }
+
     uint ClearPosition(int offset, int block)
-    {   
+    {
         // magic 🪄
         uint checkBits = (uint)State.Check;
         checkBits <<= offset;
