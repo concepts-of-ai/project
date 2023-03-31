@@ -1,14 +1,15 @@
 namespace board;
 
-enum State
-{ // 2 bits determine state of one possition (White, Black, Empty)
+public enum State
+{ 
+    // 2 bits determine state of one possition (White, Black, Empty)
     x = 0b00,
     W = 0b01,
     B = 0b10,
     Check = 0b11,
 }
 
-class Board
+public class BoardState
 {
     // frist 16 possitions in first block and remaining 8 in second block (24 total)
     const int BlockOne = 0;
@@ -20,7 +21,7 @@ class Board
     // array of two uint32 to hold board info
     uint[] board = new uint[2];
 
-    public Board(string input)
+    public BoardState(string input)
     {
         board[0] = 0;
         board[1] = 0;
@@ -28,15 +29,15 @@ class Board
     }
 
     // copy contructor
-    private Board(Board input)  
+    private BoardState(BoardState input)  
     {
         board[0] = input.GetBlock(0);
         board[1] = input.GetBlock(1);
     }
 
-    public Board Copy()
+    public BoardState Copy()
     {
-        return new Board(this);
+        return new BoardState(this);
     }
 
     public void SetBoard(string input)
@@ -44,7 +45,7 @@ class Board
         for (int i = 0; i < input.Length; i++)
         {
             var state = ParseState(input[i].ToString());
-            SetPosition(i, state);
+            SetState(i, state);
         }
     }
 
@@ -53,7 +54,7 @@ class Board
         String result = "";
         for (int i = 0; i < TotalCapacity; i++)
         {
-            result += GetPosition(i).ToString();
+            result += GetState(i).ToString();
         }
         return result;
     }
@@ -63,7 +64,7 @@ class Board
         return this.GetBoard();
     }
 
-    public void SetPosition(int pos, State state)
+    public void SetState(int pos, State state)
     {
         var (offset, block) = FindBlockAndOffset(pos);
         uint tempBlock = ClearPosition(offset, block);
@@ -82,7 +83,7 @@ class Board
         SetBlock(block, tempBlock);
     }
 
-    public State GetPosition(int pos)
+    public State GetState(int pos)
     {
         var (offset, block) = FindBlockAndOffset(pos);
 
@@ -91,6 +92,21 @@ class Board
         tempBlock >>= offset;   // offset block so that position is lowest digits
         uint checkResult = tempBlock & (int)State.Check;   // logic AND to get result
         return (State)checkResult; // convert to State
+    }
+
+    public bool IsEmptyPosition(int pos) 
+    {
+        return GetState(pos) == State.x;
+    }
+
+    public int StateCount(State state)
+    {
+        int count = 0;
+        for (int location = 0; location < TotalCapacity; location++)
+        {
+            if (GetState(location) == state) count++;
+        }
+        return count;
     }
 
     uint GetBlock(int block)
