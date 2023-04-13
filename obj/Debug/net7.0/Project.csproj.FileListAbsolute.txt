@@ -1,0 +1,15 @@
+/Users/eli/Desktop/ai-project/Project/bin/Debug/net7.0/Project
+/Users/eli/Desktop/ai-project/Project/bin/Debug/net7.0/Project.deps.json
+/Users/eli/Desktop/ai-project/Project/bin/Debug/net7.0/Project.runtimeconfig.json
+/Users/eli/Desktop/ai-project/Project/bin/Debug/net7.0/Project.dll
+/Users/eli/Desktop/ai-project/Project/bin/Debug/net7.0/Project.pdb
+/Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/Project.csproj.AssemblyReference.cache
+/Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/Project.GeneratedMSBuildEditorConfig.editorconfig
+/Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/Project.AssemblyInfoInputs.cache
+/Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/Project.AssemblyInfo.cs
+/Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/Project.csproj.CoreCompileInputs.cache
+/Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/Project.dll
+/Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/refint/Project.dll
+/Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/Project.pdb
+/Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/Project.genruntimeconfig.cache
+/Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/ref/Project.dll
