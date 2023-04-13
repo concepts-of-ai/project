@@ -10,7 +10,7 @@ internal class ProjectEntryPoint
         {
             Console.WriteLine("Enter function name followed by parameters: ");
             Console.WriteLine("      example: MiniMaxOpening <intput-file> <output-file> <depth>");
-            Console.Write("Command: ");
+            Console.Write("\nCommand: ");
             var val = Console.ReadLine();
             if (val == null)
             {
@@ -30,6 +30,10 @@ internal class ProjectEntryPoint
             else if (function == "minimaxopening")
             {
                 minimaxopening.MiniMaxOpening.MiniMaxOpeningRun(parameters);
+            }
+            // ... put other cases here
+            else {
+                Console.WriteLine("\n***** Not a valid program name -- try again.\n");
             }
         }
     }
