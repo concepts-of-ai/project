@@ -1,4 +1,6 @@
 ﻿using board;
+using minimaxgame;
+using minimaxopening;
 
 internal class ProjectEntryPoint
 {
@@ -6,20 +8,29 @@ internal class ProjectEntryPoint
     {
         while (true)
         {
-            BoardState board;
-            string? val;
-            Console.Write("Enter Board: ");
-            val = Console.ReadLine();
+            Console.WriteLine("Enter function name followed by parameters: ");
+            Console.WriteLine("      example: MiniMaxOpening <intput-file> <output-file> <depth>");
+            Console.Write("Command: ");
+            var val = Console.ReadLine();
             if (val == null)
             {
                 Console.WriteLine("==== Error: Reading null value");
                 break;
             }
-            board = new BoardState(val);
-            Console.WriteLine("Original: " + board);
 
-            var board2 = board.Copy();
-            Console.WriteLine("Copy: " + board2);
+            var parameters = val.Split(' ');
+            string function = parameters[0];
+            function = function.ToLower();
+            parameters = parameters.Where((item, index) => index != 0).ToArray();
+
+            if (function == "minimaxgame")
+            {
+                minimaxgame.MiniMaxGame.MiniMaxGameRun(parameters);
+            }
+            else if (function == "minimaxopening")
+            {
+                minimaxopening.MiniMaxOpening.MiniMaxOpeningRun(parameters);
+            }
         }
     }
 }
