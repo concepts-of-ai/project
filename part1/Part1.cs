@@ -1,6 +1,6 @@
 ﻿using board;
 
-internal class Program
+internal class Part1
 {
     private static void Main(string[] args)
     {

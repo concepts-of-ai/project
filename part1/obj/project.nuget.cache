@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CJDFQ2zCCNPXzt4JYfw5EB2hJW7BrGHe4vt06TvQjBoh7s54E7Z0XgS8EL9bU3GmN/b+s/AiJiaSArCTC1M/WA==",
+  "dgSpecHash": "ko4GyFOjq9isNtRC3QCKJ2L5WAOkllUrzIHUnGjoR6jph80IVbynLhtb+jao9JflImlK5bpNHCc8WKzcn4n1Lg==",
   "success": true,
-  "projectFilePath": "/Users/eli/Desktop/ai-project/part1/part1/console-test.csproj",
+  "projectFilePath": "/Users/eli/Desktop/ai-project/Project/part1/console-test.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
