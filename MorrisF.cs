@@ -5,24 +5,24 @@ public class MorrisF
 {
     private const int NumberOfPositions = 24;
 
-    public List<BoardState> GenerateMovesOpening(BoardState board)
+    public List<BoardState> GenerateMovesOpening(BoardState board, int depth)
     {
-        return GenerateAdd(board);
+        return GenerateAdd(board, depth);
     }
 
-    public List<BoardState> GenerateMovesMidgameEndgame(BoardState board)
+    public List<BoardState> GenerateMovesMidgameEndgame(BoardState board, int depth)
     {
-        if (board.StateCount(State.W) == 3) return GenerateHopping(board);
-        else return GenerateMove(board);
+        if (board.StateCount(State.W) == 3) return GenerateHopping(board, depth);
+        else return GenerateMove(board, depth);
     }
 
-    public OpeningStaticEstimation(BoardState board)
+    public int OpeningStaticEstimation(BoardState board)
     {
         return board.StateCount(State.W) - board.StateCount(State.B);
     }
         
 
-    public MidgameEndgameStaticEstimation(BoardState board,  List<BoardState> states)
+    public int MidgameEndgameStaticEstimation(BoardState board,  List<BoardState> states)
     {   
         var numOfBlackMoves = states.Count();
         var numOfBlackPieces = board.StateCount(State.B);
@@ -34,8 +34,10 @@ public class MorrisF
         else return 1000 * (numOfWhitePieces - numOfBlackPieces) - numOfBlackMoves;
     }
 
-    private List<BoardState> GenerateAdd(BoardState board)
+    private List<BoardState> GenerateAdd(BoardState board, int depth)
     {
+        if (depth < 0) return new List<BoardState>();
+
         var states = new List<BoardState>();
         for (int location = 0; location < NumberOfPositions; location++)
         {
@@ -43,15 +45,17 @@ public class MorrisF
             {
                 var tempBoard = board.Copy();
                 tempBoard.SetState(location, State.W);
-                if (CloseMill(location, tempBoard)) GenerateRemove(tempBoard, states);
+                if (CloseMill(location, tempBoard)) GenerateRemove(tempBoard, states, depth - 1);
                 else states.Add(tempBoard);
             }
         }
         return new List<BoardState>();
     }
 
-    private List<BoardState> GenerateMove(BoardState board)
+    private List<BoardState> GenerateMove(BoardState board, int depth)
     {
+        if (depth < 0) return new List<BoardState>();
+
         var states = new List<BoardState>();
         for (int location = 0; location < NumberOfPositions; location++)
         {
@@ -65,7 +69,7 @@ public class MorrisF
                         var tempBoard = board.Copy();
                         tempBoard.SetState(location, State.x);
                         tempBoard.SetState(position, State.W);
-                        if (CloseMill(position, tempBoard)) GenerateRemove(tempBoard, states);
+                        if (CloseMill(position, tempBoard)) GenerateRemove(tempBoard, states, depth);
                         else states.Add(tempBoard); 
                     }
                 }
@@ -74,8 +78,10 @@ public class MorrisF
         return new List<BoardState>();
     }
 
-    private List<BoardState> GenerateHopping(BoardState board)
+    private List<BoardState> GenerateHopping(BoardState board, int depth)
     {
+        if (depth < 0) return new List<BoardState>();
+
         var states = new List<BoardState>();
         for (int location = 0; location < NumberOfPositions; location++) {
             if (board.GetState(location) == State.W)
@@ -87,7 +93,7 @@ public class MorrisF
                         var tempBoard = board.Copy();
                         tempBoard.SetState(location, State.x);
                         tempBoard.SetState(location2, State.W);
-                        if (CloseMill(location2, tempBoard)) GenerateRemove(tempBoard, states);
+                        if (CloseMill(location2, tempBoard)) GenerateRemove(tempBoard, states, depth);
                         else states.Add(tempBoard);
                     }
                 }
@@ -96,8 +102,10 @@ public class MorrisF
         return new List<BoardState>();
     }
 
-    private void GenerateRemove(BoardState board, List<BoardState> states)
+    private void GenerateRemove(BoardState board, List<BoardState> states, int depth)
     {
+        if (depth < 0) return;
+
         var length = states.Count;
         for (int location = 0; location < NumberOfPositions; location++)
         {
