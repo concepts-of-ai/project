@@ -47,26 +47,27 @@ class MiniMaxOpening
         }
 
         // read input board from input file
-        Node treeRoot;
+        board.BoardState state;
         string? boardAsString = reader.ReadLine();
         if (boardAsString != null && boardAsString.Length! != 0)
         {
-            board.BoardState state = new board.BoardState(boardAsString);
-            treeRoot = new Node(state);
+            state = new board.BoardState(boardAsString);
         } else {
             Console.WriteLine("\n ***** Invalid input file value.\n");
             return;
         }
 
         // compute minimax
-
-
+        MorrisF morrisF = new MorrisF();
+        Node root = morrisF.GenerateMovesOpening(state, depth);
+        double value = MaxMin(root);
+        Console.WriteLine("value: " + value);
 
         // write output to output file
 
     }
 
-    double MaxMin(Node node)
+    static double MaxMin(Node node)
     {
         if (node.IsLeafNode()) return morrisf.MorrisF.OpeningStaticEstimation(node.GetBoard());
         else {
@@ -74,12 +75,13 @@ class MiniMaxOpening
             foreach (var child in node.GetChildren())
             {
                 value = Math.Max(value, MinMax(child));
+                Console.WriteLine("--- child: " + child.GetBoard().ToString() + ", value: " + value);
             }
             return value;
         }
     }
 
-    double MinMax(Node node)
+    static double MinMax(Node node)
     {
         if (node.IsLeafNode()) return morrisf.MorrisF.OpeningStaticEstimation(node.GetBoard());
         else {

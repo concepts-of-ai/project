@@ -5,6 +5,7 @@ public class Node
 {
     List<Node> children;
     BoardState state;
+    double value = 0;
 
     public Node(BoardState state)
     { 
@@ -36,5 +37,9 @@ public class Node
     public List<Node> GetChildren()
     {
         return this.children;
+    }
+    public void SetValue(double value)
+    {
+        this.value = value;
     }
 }
