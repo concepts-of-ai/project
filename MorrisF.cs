@@ -87,7 +87,7 @@ public class MorrisF
                 if (!CloseMill(location, board))
                 {
                     var tempBoard = board.Copy();
-                    board.SetState(location, State.x);
+                    tempBoard.SetState(location, State.x);
                     states.Add(tempBoard);
                 }
             }
