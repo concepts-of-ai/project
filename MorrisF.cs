@@ -1,4 +1,5 @@
 using board;
+namespace morrisf;
 
 public class MorrisF
 {
@@ -13,6 +14,24 @@ public class MorrisF
     {
         if (board.StateCount(State.W) == 3) return GenerateHopping(board);
         else return GenerateMove(board);
+    }
+
+    public OpeningStaticEstimation(BoardState board)
+    {
+        return board.StateCount(State.W) - board.StateCount(State.B);
+    }
+        
+
+    public MidgameEndgameStaticEstimation(BoardState board,  List<BoardState> states)
+    {   
+        var numOfBlackMoves = states.Count();
+        var numOfBlackPieces = board.StateCount(State.B);
+        var numOfWhitePieces = board.StateCount(State.W);
+       
+        if (numOfBlackPieces <= 2) return 10000;
+        else if (numOfWhitePieces <= 2) return -10000;
+        else if (numOfBlackMoves == 0) return 10000;
+        else return 1000 * (numOfWhitePieces - numOfBlackPieces) - numOfBlackMoves;
     }
 
     private List<BoardState> GenerateAdd(BoardState board)

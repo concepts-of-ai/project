@@ -1,4 +1,5 @@
 namespace minimaxopening;
+using morrisf;
 
 class MiniMaxOpening
 {
@@ -8,4 +9,7 @@ class MiniMaxOpening
             Console.WriteLine("\n ***** Not enough input parameters -- try again.\n");
         }
     }
+
+    
+
 }
