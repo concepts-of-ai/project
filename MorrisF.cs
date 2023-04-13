@@ -1,19 +1,24 @@
 using board;
+using node;
 namespace morrisf;
 
 public class MorrisF
 {
     private const int NumberOfPositions = 24;
 
-    public List<BoardState> GenerateMovesOpening(BoardState board, int depth)
+    public Node GenerateMovesOpening(BoardState board, int depth)
     {
-        return GenerateAdd(board, depth);
+        Node root = new Node(board);
+        GenerateAdd(root, depth);
+        return root;
     }
 
-    public List<BoardState> GenerateMovesMidgameEndgame(BoardState board, int depth)
+    public Node GenerateMovesMidgameEndgame(BoardState board, int depth)
     {
-        if (board.StateCount(State.W) == 3) return GenerateHopping(board, depth);
-        else return GenerateMove(board, depth);
+        Node root = new Node(board);
+        if (board.StateCount(State.W) == 3) GenerateHopping(root, depth);
+        else GenerateMove(root, depth);
+        return root;
     }
 
     public int OpeningStaticEstimation(BoardState board)
@@ -22,9 +27,9 @@ public class MorrisF
     }
         
 
-    public int MidgameEndgameStaticEstimation(BoardState board,  List<BoardState> states)
+    public int MidgameEndgameStaticEstimation(BoardState board,  Node root)
     {   
-        var numOfBlackMoves = states.Count();
+        var numOfBlackMoves = root.Count();
         var numOfBlackPieces = board.StateCount(State.B);
         var numOfWhitePieces = board.StateCount(State.W);
        
@@ -34,100 +39,95 @@ public class MorrisF
         else return 1000 * (numOfWhitePieces - numOfBlackPieces) - numOfBlackMoves;
     }
 
-    private List<BoardState> GenerateAdd(BoardState board, int depth)
+    private void GenerateAdd(Node node, int depth)
     {
-        if (depth < 0) return new List<BoardState>();
+        if (depth < 0) return;
 
-        var states = new List<BoardState>();
         for (int location = 0; location < NumberOfPositions; location++)
         {
-            if (board.IsEmptyPosition(location))
+            if (node.GetBoard().IsEmptyPosition(location))
             {
-                var tempBoard = board.Copy();
+                var tempBoard = node.GetBoard().Copy();
                 tempBoard.SetState(location, State.W);
-                if (CloseMill(location, tempBoard)) GenerateRemove(tempBoard, states, depth - 1);
-                else states.Add(tempBoard);
+                Node tempNode = new Node(tempBoard);
+                if (CloseMill(location, tempBoard)) GenerateRemove(tempNode, depth);
+                else node.AddChild(tempNode);
             }
         }
-        return new List<BoardState>();
     }
 
-    private List<BoardState> GenerateMove(BoardState board, int depth)
+    private void GenerateMove(Node node, int depth)
     {
-        if (depth < 0) return new List<BoardState>();
+        if (depth < 0) return;
 
-        var states = new List<BoardState>();
         for (int location = 0; location < NumberOfPositions; location++)
         {
-            if (board.GetState(location) == State.W)
+            if (node.GetBoard().GetState(location) == State.W)
             {
                 var neighbors = BoardLayout.GetNeighbors(location);
                 for (int position = 0; position < neighbors.Count; position++) 
                 {
-                    if (board.IsEmptyPosition(position))
+                    if (node.GetBoard().IsEmptyPosition(neighbors[position]))
                     {
-                        var tempBoard = board.Copy();
+                        var tempBoard = node.GetBoard().Copy();
                         tempBoard.SetState(location, State.x);
                         tempBoard.SetState(position, State.W);
-                        if (CloseMill(position, tempBoard)) GenerateRemove(tempBoard, states, depth);
-                        else states.Add(tempBoard); 
+                        var tempNode = new Node(tempBoard);
+                        if (CloseMill(position, tempBoard)) GenerateRemove(node, depth);
+                        else node.AddChild(tempNode); 
                     }
                 }
             }
         }
-        return new List<BoardState>();
     }
 
-    private List<BoardState> GenerateHopping(BoardState board, int depth)
+    private void GenerateHopping(Node node, int depth)
     {
-        if (depth < 0) return new List<BoardState>();
-
-        var states = new List<BoardState>();
         for (int location = 0; location < NumberOfPositions; location++) {
-            if (board.GetState(location) == State.W)
+            if (node.GetBoard().GetState(location) == State.W)
             {
                 for (int location2 = 0; location2 < NumberOfPositions; location2++)
                 {
-                    if (board.IsEmptyPosition(location2))
+                    if (node.GetBoard().IsEmptyPosition(location2))
                     {
-                        var tempBoard = board.Copy();
+                        var tempBoard = node.GetBoard().Copy();
                         tempBoard.SetState(location, State.x);
                         tempBoard.SetState(location2, State.W);
-                        if (CloseMill(location2, tempBoard)) GenerateRemove(tempBoard, states, depth);
-                        else states.Add(tempBoard);
+                        var tempNode = new Node(tempBoard);
+                        if (CloseMill(location2, tempBoard)) GenerateRemove(node, depth);
+                        else node.AddChild(tempNode);
                     }
                 }
             }
         }
-        return new List<BoardState>();
     }
 
-    private void GenerateRemove(BoardState board, List<BoardState> states, int depth)
+    private void GenerateRemove(Node node, int depth)
     {
-        if (depth < 0) return;
-
-        var length = states.Count;
+        var length = node.Count();
         for (int location = 0; location < NumberOfPositions; location++)
         {
-            if (board.GetState(location) == State.B)
+            if (node.GetBoard().GetState(location) == State.B)
             {
-                if (!CloseMill(location, board))
+                if (!CloseMill(location, node.GetBoard()))
                 {
-                    var tempBoard = board.Copy();
+                    var tempBoard = node.GetBoard().Copy();
                     tempBoard.SetState(location, State.x);
-                    states.Add(tempBoard);
+                    var tempNode = new Node(tempBoard);
+                    node.AddChild(tempNode);
                 }
             }
         }
-        if (states.Count == length) 
+        if (node.Count() == length) 
         {
             for (int location = 0; location < NumberOfPositions; location++)
             {
-                if (board.GetState(location) == State.B)
+                if (node.GetBoard().GetState(location) == State.B)
                 {
-                    var tempBoard = board.Copy();
+                    var tempBoard = node.GetBoard().Copy();
                     tempBoard.SetState(location, State.x);
-                    states.Add(tempBoard);
+                    var tempNode = new Node(tempBoard);
+                    node.AddChild(tempNode);
                 }
             }
         }
