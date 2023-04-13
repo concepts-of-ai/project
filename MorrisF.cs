@@ -21,13 +21,13 @@ public class MorrisF
         return root;
     }
 
-    public int OpeningStaticEstimation(BoardState board)
+    public static int OpeningStaticEstimation(BoardState board)
     {
         return board.StateCount(State.W) - board.StateCount(State.B);
     }
         
 
-    public int MidgameEndgameStaticEstimation(BoardState board,  Node root)
+    public static int MidgameEndgameStaticEstimation(BoardState board,  Node root)
     {   
         var numOfBlackMoves = root.Count();
         var numOfBlackPieces = board.StateCount(State.B);

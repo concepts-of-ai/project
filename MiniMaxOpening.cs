@@ -61,9 +61,35 @@ class MiniMaxOpening
         // compute minimax
 
 
+
         // write output to output file
 
     }
 
+    double MaxMin(Node node)
+    {
+        if (node.IsLeafNode()) return morrisf.MorrisF.OpeningStaticEstimation(node.GetBoard());
+        else {
+            var value = double.NegativeInfinity;
+            foreach (var child in node.GetChildren())
+            {
+                value = Math.Max(value, MinMax(child));
+            }
+            return value;
+        }
+    }
+
+    double MinMax(Node node)
+    {
+        if (node.IsLeafNode()) return morrisf.MorrisF.OpeningStaticEstimation(node.GetBoard());
+        else {
+            var value = double.PositiveInfinity;
+            foreach (var child in node.GetChildren())
+            {
+                value = Math.Min(value, MaxMin(child));
+            }
+            return value;
+        }
+    }
 
 }
