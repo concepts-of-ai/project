@@ -8,19 +8,19 @@
     "net7.0": []
   },
   "packageFolders": {
-    "/Users/jacobcharvat/.nuget/packages/": {}
+    "/Users/eli/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/jacobcharvat/Desktop/Spring 2023/AI/project/Project.csproj",
+      "projectUniqueName": "/Users/eli/Desktop/ai-project/Project/Project.csproj",
       "projectName": "Project",
-      "projectPath": "/Users/jacobcharvat/Desktop/Spring 2023/AI/project/Project.csproj",
-      "packagesPath": "/Users/jacobcharvat/.nuget/packages/",
-      "outputPath": "/Users/jacobcharvat/Desktop/Spring 2023/AI/project/obj/",
+      "projectPath": "/Users/eli/Desktop/ai-project/Project/Project.csproj",
+      "packagesPath": "/Users/eli/.nuget/packages/",
+      "outputPath": "/Users/eli/Desktop/ai-project/Project/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/jacobcharvat/.nuget/NuGet/NuGet.Config"
+        "/Users/eli/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -59,7 +59,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.203/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.201/RuntimeIdentifierGraph.json"
       }
     }
   }

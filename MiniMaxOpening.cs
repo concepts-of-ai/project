@@ -76,7 +76,6 @@ class MiniMaxOpening
             foreach (var child in node.GetChildren())
             {
                 value = Math.Max(value, MinMax(child));
-                //Console.WriteLine("--- node: " + node.GetBoard().ToString() + ", value: " + value);
             }
             return value;
         }
@@ -90,7 +89,6 @@ class MiniMaxOpening
             foreach (var child in node.GetChildren())
             {
                 value = Math.Min(value, MaxMin(child));
-                //Console.WriteLine("--- node: " + node.GetBoard().ToString() + ", value: " + value);
             }
             return value;
         }
