@@ -13,3 +13,18 @@
 /Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/Project.pdb
 /Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/Project.genruntimeconfig.cache
 /Users/eli/Desktop/ai-project/Project/obj/Debug/net7.0/ref/Project.dll
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/bin/Debug/net7.0/Project
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/bin/Debug/net7.0/Project.deps.json
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/bin/Debug/net7.0/Project.runtimeconfig.json
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/bin/Debug/net7.0/Project.dll
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/bin/Debug/net7.0/Project.pdb
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/obj/Debug/net7.0/Project.csproj.AssemblyReference.cache
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/obj/Debug/net7.0/Project.GeneratedMSBuildEditorConfig.editorconfig
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/obj/Debug/net7.0/Project.AssemblyInfoInputs.cache
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/obj/Debug/net7.0/Project.AssemblyInfo.cs
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/obj/Debug/net7.0/Project.csproj.CoreCompileInputs.cache
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/obj/Debug/net7.0/Project.dll
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/obj/Debug/net7.0/refint/Project.dll
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/obj/Debug/net7.0/Project.pdb
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/obj/Debug/net7.0/Project.genruntimeconfig.cache
+/Users/jacobcharvat/Desktop/Spring 2023/AI/project/obj/Debug/net7.0/ref/Project.dll

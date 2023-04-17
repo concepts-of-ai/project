@@ -59,39 +59,43 @@ class MiniMaxOpening
 
         // compute minimax
         MorrisF morrisF = new MorrisF();
-        Node root = morrisF.GenerateMovesOpening(state, depth);
+        Node root = new Node(state);
+        Node tree = morrisF.GenerateMovesOpening(root, depth, true);
         double value = MaxMin(root);
-        Console.WriteLine("value: " + value);
+        Console.WriteLine(value);
 
         // write output to output file
 
     }
 
-    static double MaxMin(Node node)
+    static int MaxMin(Node node)
     {
-        if (node.IsLeafNode()) return morrisf.MorrisF.OpeningStaticEstimation(node.GetBoard());
+        if (node.IsLeafNode()) return morrisf.MorrisF.OpeningStaticEstimation(node);
         else {
-            var value = double.NegativeInfinity;
+            var value = -100000;
             foreach (var child in node.GetChildren())
             {
                 value = Math.Max(value, MinMax(child));
-                Console.WriteLine("--- child: " + child.GetBoard().ToString() + ", value: " + value);
+                //Console.WriteLine("--- node: " + node.GetBoard().ToString() + ", value: " + value);
             }
             return value;
         }
     }
 
-    static double MinMax(Node node)
+    static int MinMax(Node node)
     {
-        if (node.IsLeafNode()) return morrisf.MorrisF.OpeningStaticEstimation(node.GetBoard());
+        if (node.IsLeafNode()) return morrisf.MorrisF.OpeningStaticEstimation(node);
         else {
-            var value = double.PositiveInfinity;
+            var value = 100000;
             foreach (var child in node.GetChildren())
             {
                 value = Math.Min(value, MaxMin(child));
+                //Console.WriteLine("--- node: " + node.GetBoard().ToString() + ", value: " + value);
             }
             return value;
         }
     }
 
 }
+
+// minimaxopening input.txt output.txt 2

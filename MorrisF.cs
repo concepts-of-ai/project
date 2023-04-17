@@ -4,12 +4,12 @@ namespace morrisf;
 
 public class MorrisF
 {
-    private const int NumberOfPositions = 24;
+    private int NumberOfPositions = 24;
 
-    public Node GenerateMovesOpening(BoardState board, int depth)
+    public Node GenerateMovesOpening(Node root, int depth, bool white)
     {
-        Node root = new Node(board);
-        GenerateAdd(root, depth);
+        //Node root = new Node(board);
+        GenerateAdd(root, depth, white);
         return root;
     }
 
@@ -21,17 +21,17 @@ public class MorrisF
         return root;
     }
 
-    public static int OpeningStaticEstimation(BoardState board)
+    public static int OpeningStaticEstimation(Node root)
     {
-        return board.StateCount(State.W) - board.StateCount(State.B);
+        return root.GetBoard().StateCount(State.W) - root.GetBoard().StateCount(State.B);
     }
         
 
-    public static int MidgameEndgameStaticEstimation(BoardState board,  Node root)
+    public static int MidgameEndgameStaticEstimation(Node root)
     {   
         var numOfBlackMoves = root.Count();
-        var numOfBlackPieces = board.StateCount(State.B);
-        var numOfWhitePieces = board.StateCount(State.W);
+        var numOfBlackPieces = root.GetBoard().StateCount(State.B);
+        var numOfWhitePieces = root.GetBoard().StateCount(State.W);
        
         if (numOfBlackPieces <= 2) return 10000;
         else if (numOfWhitePieces <= 2) return -10000;
@@ -39,7 +39,7 @@ public class MorrisF
         else return 1000 * (numOfWhitePieces - numOfBlackPieces) - numOfBlackMoves;
     }
 
-    private void GenerateAdd(Node node, int depth)
+    private void GenerateAdd(Node node, int depth, bool white)
     {
         if (depth < 0) return;
 
@@ -48,10 +48,15 @@ public class MorrisF
             if (node.GetBoard().IsEmptyPosition(location))
             {
                 var tempBoard = node.GetBoard().Copy();
-                tempBoard.SetState(location, State.W);
+                if(white) tempBoard.SetState(location, State.W);
+                else tempBoard.SetState(location, State.B);
                 Node tempNode = new Node(tempBoard);
                 if (CloseMill(location, tempBoard)) GenerateRemove(tempNode, depth);
-                else node.AddChild(tempNode);
+                else{
+                    node.AddChild(tempNode);
+                    //Console.WriteLine(tempNode.GetBoard().ToString());
+                }
+                GenerateMovesOpening(tempNode, depth - 1, !white);
             }
         }
     }

@@ -129,6 +129,16 @@ public class BoardState
         return tempBlock & mask;
     }
 
+    public void FlipBoard(){
+        for(int i = 0; i < TotalCapacity; i++){
+            if(GetState(i) == State.W){
+                SetState(i, State.B);
+            }else if(GetState(i) == State.B){
+                SetState(i, State.W);
+            }
+        }
+    }
+
     State ParseState(String item)
     {
         return (State)Enum.Parse(typeof(State), item, true);

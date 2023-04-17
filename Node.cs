@@ -42,4 +42,8 @@ public class Node
     {
         this.value = value;
     }
+    public double GetValue()
+    {
+        return this.value;
+    }
 }
