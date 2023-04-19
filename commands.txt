@@ -5,4 +5,4 @@ to compile a file using BaseGame.dll:
     $ csc -target:exe -out:bin/<name-of-file>.exe src/<name-of-file>.cs -r:bin/BaseGame.dll
 
 to run the program on OSX:
-    mono <file-name>.exe <args>
+    mono src/<file-name>.exe <args...>
