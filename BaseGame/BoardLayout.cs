@@ -1,4 +1,5 @@
-using board;
+using System;
+using System.Collections.Generic;
 
 public static class BoardLayout
 {

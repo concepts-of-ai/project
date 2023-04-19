@@ -1,13 +1,12 @@
-namespace minimaxopening;
-using morrisf;
-using node;
+using System;
 using System.IO;
+using System.Collections.Generic;
 
 class MiniMaxOpening
 {
-    public static void MiniMaxOpeningRun(string[] args)
+    public static void Main(String[] args)
     {
-        if (args.Count() != 3)
+        if (args.Length != 3)
         {
             Console.WriteLine("\n ***** Not enough input parameters -- try again.\n");
             return;
@@ -47,11 +46,11 @@ class MiniMaxOpening
         }
 
         // read input board from input file
-        board.BoardState state;
+        BoardState state;
         string? boardAsString = reader.ReadLine();
         if (boardAsString != null && boardAsString.Length! != 0)
         {
-            state = new board.BoardState(boardAsString);
+            state = new BoardState(boardAsString);
         } else {
             Console.WriteLine("\n ***** Invalid input file value.\n");
             return;
@@ -70,7 +69,7 @@ class MiniMaxOpening
 
     static int MaxMin(Node node)
     {
-        if (node.IsLeafNode()) return morrisf.MorrisF.OpeningStaticEstimation(node);
+        if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
         else {
             var value = -100000;
             foreach (var child in node.GetChildren())
@@ -83,7 +82,7 @@ class MiniMaxOpening
 
     static int MinMax(Node node)
     {
-        if (node.IsLeafNode()) return morrisf.MorrisF.OpeningStaticEstimation(node);
+        if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
         else {
             var value = 100000;
             foreach (var child in node.GetChildren())

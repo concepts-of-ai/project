@@ -1,6 +1,5 @@
-using board;
-using node;
-namespace morrisf;
+using System;
+using System.Collections.Generic;
 
 public class MorrisF
 {

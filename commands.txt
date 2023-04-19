@@ -1,0 +1,8 @@
+to compile the BaseGame files into a usable DLL:
+    $ csc -target:library -out:BaseGame.dll BaseGame/*.cs
+
+to compile a file using BaseGame.dll:
+    $ csc -target:exe -out:<name-of-file>.exe <name-of-file>.cs -r:BaseGame.dll
+
+to run the program on OSX:
+    mono <file-name>.exe <args>

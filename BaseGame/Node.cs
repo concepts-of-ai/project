@@ -1,5 +1,5 @@
-using board;
-namespace node;
+using System;
+using System.Collections.Generic;
 
 public class Node
 {
@@ -17,7 +17,7 @@ public class Node
     }
     public bool IsLeafNode()
     {
-        return this.children.Count() == 0;
+        return this.children.Count == 0;
     }
     public int Count()
     {
