@@ -26,17 +26,6 @@ class ABOpening
             return;
         }
 
-        StreamWriter? writer;
-        try
-        {
-            //writer = new StreamWriter(args[1]);
-        } 
-        catch (Exception) 
-        {
-            Console.WriteLine("\n ***** Invalid output file.\n");
-            return;
-        }
-
         int depth;
         try 
         {
@@ -63,21 +52,25 @@ class ABOpening
         MorrisF morrisF = new MorrisF();
         Node root = new Node(state);
         Node tree = morrisF.GenerateMovesOpening(root, depth, true);
+
         tree.SetValue(MaxMin(tree, -100000, 1000000));
-        //Console.WriteLine(tree.GetValue());
         Node bestChild = tree.findChildNode();
-        // Console.WriteLine(bestChild.GetBoard().ToString());
-        // Console.WriteLine(stateCounter);
+
 		String output = "";
 		output += "Input State: " + root.GetBoard().ToString() + "\n";
 		output += "Output State: " + bestChild.GetBoard().ToString() +"\n";
 		output += "States evaluated by static estimation: " + stateCounter + "\n";
 		output += "MINIMAX estimate: " + root.GetValue() + "\n";
-		File.WriteAllText(args[1], output);
 
-
-        // write output to output file
-
+        try
+        {
+		    File.WriteAllText(args[1], output);
+        } 
+        catch (Exception) 
+        {
+            Console.WriteLine("\n ***** Invalid output file.\n");
+            return;
+        }
     }
 
     static int MaxMin(Node node, int alpha, int beta)

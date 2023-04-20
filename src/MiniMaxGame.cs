@@ -26,17 +26,6 @@ class MiniMaxGame
             return;
         }
 
-        StreamWriter? writer;
-        try
-        {
-            writer = new StreamWriter(args[1]);
-        } 
-        catch (Exception) 
-        {
-            Console.WriteLine("\n ***** Invalid output file.\n");
-            return;
-        }
-
         int depth;
         try 
         {
@@ -63,20 +52,35 @@ class MiniMaxGame
         MorrisF morrisF = new MorrisF();
         Node root = new Node(state);
         Node tree = morrisF.GenerateMovesMidgameEndgame(root, depth, true);
+
         tree.SetValue(MaxMin(tree));
         Console.WriteLine(tree.GetValue());
+
         Node bestChild = tree.findChildNode();
         Console.WriteLine(bestChild.GetBoard().ToString());
         Console.WriteLine(stateCounter);
 
-        // write output to output file
+        String output = "";
+		output += "Input State: " + root.GetBoard().ToString() + "\n";
+		output += "Output State: " + bestChild.GetBoard().ToString() +"\n";
+		output += "States evaluated by static estimation: " + stateCounter + "\n";
+		output += "MINIMAX estimate: " + root.GetValue() + "\n";
 
+        try
+        {
+            File.WriteAllText(args[1], output);
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("\n ***** Invalid output file.\n");
+            return;
+        }
     }
 
     static int MaxMin(Node node)
     {
         stateCounter++;
-        if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
+        if (node.IsLeafNode()) return MorrisF.MidgameEndgameStaticEstimation(node);
         else {
             var value = -100000;
             foreach (var child in node.GetChildren())

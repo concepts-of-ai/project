@@ -13,7 +13,11 @@ public class MorrisF
 
     public Node GenerateMovesMidgameEndgame(Node root, int depth, bool white)
     {
-        if (root.GetBoard().StateCount(State.W) == 3) GenerateHopping(root, depth, white);
+        State currentState;
+        if (white) currentState = State.W;
+        else currentState = State.B;
+
+        if (root.GetBoard().StateCount(currentState) == 3) GenerateHopping(root, depth, white);
         else GenerateMove(root, depth, white);
         return root;
     }

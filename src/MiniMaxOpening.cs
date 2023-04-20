@@ -26,19 +26,8 @@ class MiniMaxOpening
             return;
         }
 
-        StreamWriter? writer;
-        try
-        {
-            //writer = new StreamWriter(args[1]);
-        } 
-        catch (Exception) 
-        {
-            Console.WriteLine("\n ***** Invalid output file.\n");
-            return;
-        }
-
         int depth;
-        try 
+        try
         {
             depth = Int32.Parse(args[2]);
         }
@@ -54,7 +43,9 @@ class MiniMaxOpening
         if (boardAsString != null && boardAsString.Length! != 0)
         {
             state = new BoardState(boardAsString);
-        } else {
+        }
+        else
+        {
             Console.WriteLine("\n ***** Invalid input file value.\n");
             return;
         }
@@ -63,27 +54,33 @@ class MiniMaxOpening
         MorrisF morrisF = new MorrisF();
         Node root = new Node(state);
         Node tree = morrisF.GenerateMovesOpening(root, depth, true);
+
         tree.SetValue(MaxMin(tree));
-        //Console.WriteLine(tree.GetValue());
         Node bestChild = tree.findChildNode();
-        // Console.WriteLine(bestChild.GetBoard().ToString());
-        // Console.WriteLine(stateCounter);
-		String output = "";
-		output += "Input State: " + root.GetBoard().ToString() + "\n";
-		output += "Output State: " + bestChild.GetBoard().ToString() +"\n";
-		output += "States evaluated by static estimation: " + stateCounter + "\n";
-		output += "MINIMAX estimate: " + root.GetValue() + "\n";
-		File.WriteAllText(args[1], output);
+        
+        String output = "";
+        output += "Input State: " + root.GetBoard().ToString() + "\n";
+        output += "Output State: " + bestChild.GetBoard().ToString() + "\n";
+        output += "States evaluated by static estimation: " + stateCounter + "\n";
+        output += "MINIMAX estimate: " + root.GetValue() + "\n";
 
-        // write output to output file
-
+        try
+        {
+            File.WriteAllText(args[1], output);
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("\n ***** Invalid output file.\n");
+            return;
+        }
     }
 
     static int MaxMin(Node node)
     {
         stateCounter++;
         if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
-        else {
+        else
+        {
             var value = -100000;
             foreach (var child in node.GetChildren())
             {
@@ -98,7 +95,8 @@ class MiniMaxOpening
     {
         stateCounter++;
         if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
-        else {
+        else
+        {
             var value = 100000;
             foreach (var child in node.GetChildren())
             {
