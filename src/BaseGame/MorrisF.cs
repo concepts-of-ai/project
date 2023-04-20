@@ -7,16 +7,14 @@ public class MorrisF
 
     public Node GenerateMovesOpening(Node root, int depth, bool white)
     {
-        //Node root = new Node(board);
         GenerateAdd(root, depth, white);
         return root;
     }
 
-    public Node GenerateMovesMidgameEndgame(BoardState board, int depth)
+    public Node GenerateMovesMidgameEndgame(Node root, int depth, bool white)
     {
-        Node root = new Node(board);
-        if (board.StateCount(State.W) == 3) GenerateHopping(root, depth);
-        else GenerateMove(root, depth);
+        if (root.GetBoard().StateCount(State.W) == 3) GenerateHopping(root, depth, white);
+        else GenerateMove(root, depth, white);
         return root;
     }
 
@@ -42,16 +40,18 @@ public class MorrisF
     private void GenerateAdd(Node node, int depth, bool white)
     {
         if (depth == 0) return;
+        State currentState;
+        if (white) currentState = State.W;
+        else currentState = State.B;
 
         for (int location = 0; location < NumberOfPositions; location++)
         {
             if (node.GetBoard().IsEmptyPosition(location))
             {
                 var tempBoard = node.GetBoard().Copy();
-                if (white) tempBoard.SetState(location, State.W);
-                else tempBoard.SetState(location, State.B);
+                tempBoard.SetState(location, currentState);
                 Node tempNode = new Node(tempBoard);
-                if (CloseMill(location, tempBoard)) GenerateRemove(node, tempNode, depth);
+                if (CloseMill(location, tempBoard)) GenerateRemove(node, tempNode, depth, white);
                 else
                 {
                     node.AddChild(tempNode);
@@ -62,13 +62,17 @@ public class MorrisF
         }
     }
 
-    private void GenerateMove(Node node, int depth)
+    private void GenerateMove(Node node, int depth, bool white)
     {
         if (depth == 0) return;
 
+        State currentState;
+        if (white) currentState = State.W;
+        else currentState = State.B;
+
         for (int location = 0; location < NumberOfPositions; location++)
         {
-            if (node.GetBoard().GetState(location) == State.W)
+            if (node.GetBoard().GetState(location) == currentState)
             {
                 var neighbors = BoardLayout.GetNeighbors(location);
                 for (int position = 0; position < neighbors.Count; position++)
@@ -77,21 +81,28 @@ public class MorrisF
                     {
                         var tempBoard = node.GetBoard().Copy();
                         tempBoard.SetState(location, State.x);
-                        tempBoard.SetState(position, State.W);
+                        tempBoard.SetState(position, currentState);
                         var tempNode = new Node(tempBoard);
-                        if (CloseMill(position, tempBoard)) GenerateRemove(node, tempNode, depth);
+                        if (CloseMill(position, tempBoard)) GenerateRemove(node, tempNode, depth, white);
                         else node.AddChild(tempNode);
+                        GenerateMovesMidgameEndgame(node, depth - 1, !white);
                     }
                 }
             }
         }
     }
 
-    private void GenerateHopping(Node node, int depth)
+    private void GenerateHopping(Node node, int depth, bool white)
     {
+        if (depth == 0) return;
+
+        State currentState;
+        if (white) currentState = State.W;
+        else currentState = State.B;
+
         for (int location = 0; location < NumberOfPositions; location++)
         {
-            if (node.GetBoard().GetState(location) == State.W)
+            if (node.GetBoard().GetState(location) == currentState)
             {
                 for (int location2 = 0; location2 < NumberOfPositions; location2++)
                 {
@@ -99,23 +110,28 @@ public class MorrisF
                     {
                         var tempBoard = node.GetBoard().Copy();
                         tempBoard.SetState(location, State.x);
-                        tempBoard.SetState(location2, State.W);
+                        tempBoard.SetState(location2, currentState);
                         var tempNode = new Node(tempBoard);
-                        if (CloseMill(location2, tempBoard)) GenerateRemove(node, tempNode, depth);
+                        if (CloseMill(location2, tempBoard)) GenerateRemove(node, tempNode, depth, white);
                         else node.AddChild(tempNode);
+                        GenerateMovesMidgameEndgame(node, depth - 1, !white);
                     }
                 }
             }
         }
     }
 
-    private void GenerateRemove(Node root, Node node, int depth)
+    private void GenerateRemove(Node root, Node node, int depth, bool white)
     {
+        State stateToRemove;
+        if (white) stateToRemove = State.B;
+        else stateToRemove = State.W;
+
         var length = node.Count();
         for (int location = 0; location < NumberOfPositions; location++)
         {
-           if (node.GetBoard().GetState(location) != State.x)
-           {
+            if (node.GetBoard().GetState(location) == stateToRemove)
+            {
                 if (!CloseMill(location, node.GetBoard()))
                 {
                     var tempBoard = node.GetBoard().Copy();
@@ -130,7 +146,7 @@ public class MorrisF
         {
             for (int location = 0; location < NumberOfPositions; location++)
             {
-                if (node.GetBoard().GetState(location) != State.x)
+                if (node.GetBoard().GetState(location) == stateToRemove)
                 {
                     var tempBoard = node.GetBoard().Copy();
                     tempBoard.SetState(location, State.x);

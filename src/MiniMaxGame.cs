@@ -4,12 +4,102 @@ using System.Collections.Generic;
 
 class MiniMaxGame
 {
-    public static void Main(string[] args)
+    public static long stateCounter;
+
+    public static void Main(String[] args)
     {
-        foreach (var arg in args)
+        stateCounter = 0;
+        if (args.Length != 3)
         {
-            Console.Write(arg + " ");
+            Console.WriteLine("\n ***** Not enough input parameters -- try again.\n");
+            return;
         }
-        Console.WriteLine("");
+
+        StreamReader? reader;
+        try
+        {
+            reader = new StreamReader(args[0]);
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("\n ***** Invalid input file.\n");
+            return;
+        }
+
+        StreamWriter? writer;
+        try
+        {
+            writer = new StreamWriter(args[1]);
+        } 
+        catch (Exception) 
+        {
+            Console.WriteLine("\n ***** Invalid output file.\n");
+            return;
+        }
+
+        int depth;
+        try 
+        {
+            depth = Int32.Parse(args[2]);
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("\n ***** Invalid depth value.\n");
+            return;
+        }
+
+        // read input board from input file
+        BoardState state;
+        string? boardAsString = reader.ReadLine();
+        if (boardAsString != null && boardAsString.Length! != 0)
+        {
+            state = new BoardState(boardAsString);
+        } else {
+            Console.WriteLine("\n ***** Invalid input file value.\n");
+            return;
+        }
+
+        // compute minimax
+        MorrisF morrisF = new MorrisF();
+        Node root = new Node(state);
+        Node tree = morrisF.GenerateMovesMidgameEndgame(root, depth, true);
+        tree.SetValue(MaxMin(tree));
+        Console.WriteLine(tree.GetValue());
+        Node bestChild = tree.findChildNode();
+        Console.WriteLine(bestChild.GetBoard().ToString());
+        Console.WriteLine(stateCounter);
+
+        // write output to output file
+
+    }
+
+    static int MaxMin(Node node)
+    {
+        stateCounter++;
+        if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
+        else {
+            var value = -100000;
+            foreach (var child in node.GetChildren())
+            {
+                value = Math.Max(value, MinMax(child));
+            }
+            node.SetValue(value);
+            return value;
+        }
+    }
+
+    static int MinMax(Node node)
+    {
+        stateCounter++;
+        if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
+        else {
+            var value = 100000;
+            foreach (var child in node.GetChildren())
+            {
+                value = Math.Min(value, MaxMin(child));
+            }
+            node.SetValue(value);
+            return value;
+        }
     }
 }
