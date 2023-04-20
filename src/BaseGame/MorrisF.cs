@@ -24,8 +24,8 @@ public class MorrisF
 
     public static int OpeningStaticEstimation(Node root)
     {
-        root.SetValue(root.GetBoard().StateCount(State.W) - root.GetBoard().StateCount(State.B));
-        return root.GetBoard().StateCount(State.W) - root.GetBoard().StateCount(State.B);
+        var value = root.GetBoard().StateCount(State.W) - root.GetBoard().StateCount(State.B);
+        return root.SetValue(value);
     }
 
 
@@ -35,10 +35,10 @@ public class MorrisF
         var numOfBlackPieces = root.GetBoard().StateCount(State.B);
         var numOfWhitePieces = root.GetBoard().StateCount(State.W);
 
-        if (numOfBlackPieces <= 2) return 10000;
-        else if (numOfWhitePieces <= 2) return -10000;
-        else if (numOfBlackMoves == 0) return 10000;
-        else return 1000 * (numOfWhitePieces - numOfBlackPieces) - numOfBlackMoves;
+        if (numOfBlackPieces <= 2) return root.SetValue(10000);
+        else if (numOfWhitePieces <= 2) return root.SetValue(-10000);
+        else if (numOfBlackMoves == 0) return root.SetValue(10000);
+        else return root.SetValue(1000 * (numOfWhitePieces - numOfBlackPieces) - numOfBlackMoves);
     }
 
     private void GenerateAdd(Node node, int depth, bool white)
@@ -55,7 +55,10 @@ public class MorrisF
                 var tempBoard = node.GetBoard().Copy();
                 tempBoard.SetState(location, currentState);
                 Node tempNode = new Node(tempBoard);
-                if (CloseMill(location, tempBoard)) GenerateRemove(node, tempNode, depth, white);
+                if (CloseMill(location, tempBoard)) 
+                {
+                    GenerateRemove(node, tempNode, depth, white, () => GenerateMovesOpening(node, depth - 1, !white));
+                }
                 else
                 {
                     node.AddChild(tempNode);
@@ -87,7 +90,10 @@ public class MorrisF
                         tempBoard.SetState(location, State.x);
                         tempBoard.SetState(position, currentState);
                         var tempNode = new Node(tempBoard);
-                        if (CloseMill(position, tempBoard)) GenerateRemove(node, tempNode, depth, white);
+                        if (CloseMill(position, tempBoard))
+                        {
+                            GenerateRemove(node, tempNode, depth, white, () => GenerateMovesMidgameEndgame(node, depth - 1, !white));
+                        }
                         else node.AddChild(tempNode);
                         GenerateMovesMidgameEndgame(node, depth - 1, !white);
                     }
@@ -116,7 +122,10 @@ public class MorrisF
                         tempBoard.SetState(location, State.x);
                         tempBoard.SetState(location2, currentState);
                         var tempNode = new Node(tempBoard);
-                        if (CloseMill(location2, tempBoard)) GenerateRemove(node, tempNode, depth, white);
+                        if (CloseMill(location2, tempBoard)) 
+                        { 
+                            GenerateRemove(node, tempNode, depth, white, () => GenerateMovesMidgameEndgame(node, depth - 1, !white)); 
+                        }
                         else node.AddChild(tempNode);
                         GenerateMovesMidgameEndgame(node, depth - 1, !white);
                     }
@@ -125,7 +134,7 @@ public class MorrisF
         }
     }
 
-    private void GenerateRemove(Node root, Node node, int depth, bool white)
+    private void GenerateRemove(Node root, Node node, int depth, bool white, System.Action callBack)
     {
         State stateToRemove;
         if (white) stateToRemove = State.B;
@@ -143,6 +152,7 @@ public class MorrisF
                     //Console.WriteLine("======= " + tempBoard.ToString());
                     var tempNode = new Node(tempBoard);
                     root.AddChild(tempNode);
+                    callBack();
                 }
             }
         }
@@ -156,6 +166,7 @@ public class MorrisF
                     tempBoard.SetState(location, State.x);
                     var tempNode = new Node(tempBoard);
                     root.AddChild(tempNode);
+                    callBack();
                 }
             }
         }

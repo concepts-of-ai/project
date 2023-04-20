@@ -38,9 +38,10 @@ public class Node
     {
         return this.children;
     }
-    public void SetValue(double value)
+    public int SetValue(int value)
     {
         this.value = value;
+        return value;
     }
     public double GetValue()
     {

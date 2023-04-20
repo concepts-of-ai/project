@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-class MiniMaxGame
+class ABGame
 {
     public static long stateCounter;
 
@@ -27,7 +27,7 @@ class MiniMaxGame
         }
 
         int depth;
-        try 
+        try
         {
             depth = Int32.Parse(args[2]);
         }
@@ -43,7 +43,9 @@ class MiniMaxGame
         if (boardAsString != null && boardAsString.Length! != 0)
         {
             state = new BoardState(boardAsString);
-        } else {
+        }
+        else
+        {
             Console.WriteLine("\n ***** Invalid input file value.\n");
             return;
         }
@@ -53,14 +55,14 @@ class MiniMaxGame
         Node root = new Node(state);
         Node tree = morrisF.GenerateMovesMidgameEndgame(root, depth, true);
 
-        tree.SetValue(MaxMin(tree));
+        tree.SetValue(MaxMin(tree, -100000, 1000000));
         Node bestChild = tree.findChildNode();
 
         String output = "";
-		output += "Input State: " + root.GetBoard().ToString() + "\n";
-		output += "Output State: " + bestChild.GetBoard().ToString() +"\n";
-		output += "States evaluated by static estimation: " + stateCounter + "\n";
-		output += "MINIMAX estimate: " + root.GetValue() + "\n";
+        output += "Input State: " + root.GetBoard().ToString() + "\n";
+        output += "Output State: " + bestChild.GetBoard().ToString() + "\n";
+        output += "States evaluated by static estimation: " + stateCounter + "\n";
+        output += "MINIMAX estimate: " + root.GetValue() + "\n";
 
         try
         {
@@ -73,30 +75,44 @@ class MiniMaxGame
         }
     }
 
-    static int MaxMin(Node node)
+    static int MaxMin(Node node, int alpha, int beta)
     {
         stateCounter++;
         if (node.IsLeafNode()) return MorrisF.MidgameEndgameStaticEstimation(node);
-        else {
+        else
+        {
             var value = -100000;
             foreach (var child in node.GetChildren())
             {
-                value = Math.Max(value, MinMax(child));
+                value = Math.Max(value, MinMax(child, alpha, beta));
+                if (value >= beta)
+                {
+                    node.SetValue(value);
+                    return value;
+                }
+                else alpha = Math.Max(alpha, value);
             }
             node.SetValue(value);
             return value;
         }
     }
 
-    static int MinMax(Node node)
+    static int MinMax(Node node, int alpha, int beta)
     {
         stateCounter++;
         if (node.IsLeafNode()) return MorrisF.MidgameEndgameStaticEstimation(node);
-        else {
+        else
+        {
             var value = 100000;
             foreach (var child in node.GetChildren())
             {
-                value = Math.Min(value, MaxMin(child));
+                value = Math.Min(value, MaxMin(child, alpha, beta));
+                if (value <= alpha)
+                {
+                    node.SetValue(value);
+                    return value;
+                }
+                else beta = Math.Min(value, beta);
             }
             node.SetValue(value);
             return value;
