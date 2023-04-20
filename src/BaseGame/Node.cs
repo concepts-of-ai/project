@@ -46,4 +46,14 @@ public class Node
     {
         return this.value;
     }
+    public Node findChildNode()
+    {
+        foreach (var child in this.GetChildren())
+        {
+            if(this.value == child.value){
+                return child;
+            }
+        }
+        return this;
+    }
 }

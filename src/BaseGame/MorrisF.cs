@@ -22,6 +22,7 @@ public class MorrisF
 
     public static int OpeningStaticEstimation(Node root)
     {
+        root.SetValue(root.GetBoard().StateCount(State.W) - root.GetBoard().StateCount(State.B));
         return root.GetBoard().StateCount(State.W) - root.GetBoard().StateCount(State.B);
     }
 
@@ -40,7 +41,7 @@ public class MorrisF
 
     private void GenerateAdd(Node node, int depth, bool white)
     {
-        if (depth < 0) return;
+        if (depth == 0) return;
 
         for (int location = 0; location < NumberOfPositions; location++)
         {
@@ -50,11 +51,11 @@ public class MorrisF
                 if (white) tempBoard.SetState(location, State.W);
                 else tempBoard.SetState(location, State.B);
                 Node tempNode = new Node(tempBoard);
-                if (CloseMill(location, tempBoard)) GenerateRemove(tempNode, depth);
+                if (CloseMill(location, tempBoard)) GenerateRemove(node, tempNode, depth);
                 else
                 {
                     node.AddChild(tempNode);
-                    // Console.WriteLine(tempNode.GetBoard().ToString());
+                    //Console.WriteLine(tempNode.GetBoard().ToString());
                 }
                 GenerateMovesOpening(tempNode, depth - 1, !white);
             }
@@ -63,7 +64,7 @@ public class MorrisF
 
     private void GenerateMove(Node node, int depth)
     {
-        if (depth < 0) return;
+        if (depth == 0) return;
 
         for (int location = 0; location < NumberOfPositions; location++)
         {
@@ -78,7 +79,7 @@ public class MorrisF
                         tempBoard.SetState(location, State.x);
                         tempBoard.SetState(position, State.W);
                         var tempNode = new Node(tempBoard);
-                        if (CloseMill(position, tempBoard)) GenerateRemove(node, depth);
+                        if (CloseMill(position, tempBoard)) GenerateRemove(node, tempNode, depth);
                         else node.AddChild(tempNode);
                     }
                 }
@@ -100,7 +101,7 @@ public class MorrisF
                         tempBoard.SetState(location, State.x);
                         tempBoard.SetState(location2, State.W);
                         var tempNode = new Node(tempBoard);
-                        if (CloseMill(location2, tempBoard)) GenerateRemove(node, depth);
+                        if (CloseMill(location2, tempBoard)) GenerateRemove(node, tempNode, depth);
                         else node.AddChild(tempNode);
                     }
                 }
@@ -108,20 +109,20 @@ public class MorrisF
         }
     }
 
-    private void GenerateRemove(Node node, int depth)
+    private void GenerateRemove(Node root, Node node, int depth)
     {
         var length = node.Count();
         for (int location = 0; location < NumberOfPositions; location++)
         {
-            if (node.GetBoard().GetState(location) == State.B)
-            {
+           if (node.GetBoard().GetState(location) != State.x)
+           {
                 if (!CloseMill(location, node.GetBoard()))
                 {
                     var tempBoard = node.GetBoard().Copy();
                     tempBoard.SetState(location, State.x);
-                    Console.WriteLine("======= " + tempBoard.ToString());
+                    //Console.WriteLine("======= " + tempBoard.ToString());
                     var tempNode = new Node(tempBoard);
-                    node.AddChild(tempNode);
+                    root.AddChild(tempNode);
                 }
             }
         }
@@ -134,7 +135,7 @@ public class MorrisF
                     var tempBoard = node.GetBoard().Copy();
                     tempBoard.SetState(location, State.x);
                     var tempNode = new Node(tempBoard);
-                    node.AddChild(tempNode);
+                    root.AddChild(tempNode);
                 }
             }
         }
@@ -157,7 +158,7 @@ public class MorrisF
             State s3 = board.GetState(c);
             if (s1 == pos && s2 == pos && s3 == pos)
             {
-                Console.WriteLine("Close Mill: " + a.ToString("00") + " " + b.ToString("00") + " " + c.ToString("00") + " || state: " + pos.ToString());
+                //Console.WriteLine("Close Mill: " + a.ToString("00") + " " + b.ToString("00") + " " + c.ToString("00") + " || state: " + pos.ToString());
                 return true;
             }
         }

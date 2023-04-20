@@ -4,8 +4,11 @@ using System.Collections.Generic;
 
 class MiniMaxOpening
 {
+    public static long stateCounter;
+
     public static void Main(String[] args)
     {
+        stateCounter = 0;
         if (args.Length != 3)
         {
             Console.WriteLine("\n ***** Not enough input parameters -- try again.\n");
@@ -60,8 +63,11 @@ class MiniMaxOpening
         MorrisF morrisF = new MorrisF();
         Node root = new Node(state);
         Node tree = morrisF.GenerateMovesOpening(root, depth, true);
-        double value = MaxMin(root);
-        Console.WriteLine(value);
+        tree.SetValue(MaxMin(tree));
+        Console.WriteLine(tree.GetValue());
+        Node bestChild = tree.findChildNode();
+        Console.WriteLine(bestChild.GetBoard().ToString());
+        Console.WriteLine(stateCounter);
 
         // write output to output file
 
@@ -69,6 +75,7 @@ class MiniMaxOpening
 
     static int MaxMin(Node node)
     {
+        stateCounter++;
         if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
         else {
             var value = -100000;
@@ -76,12 +83,14 @@ class MiniMaxOpening
             {
                 value = Math.Max(value, MinMax(child));
             }
+            node.SetValue(value);
             return value;
         }
     }
 
     static int MinMax(Node node)
     {
+        stateCounter++;
         if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
         else {
             var value = 100000;
@@ -89,6 +98,7 @@ class MiniMaxOpening
             {
                 value = Math.Min(value, MaxMin(child));
             }
+            node.SetValue(value);
             return value;
         }
     }
