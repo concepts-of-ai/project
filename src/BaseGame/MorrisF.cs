@@ -130,7 +130,7 @@ public class MorrisF
         {
             for (int location = 0; location < NumberOfPositions; location++)
             {
-                if (node.GetBoard().GetState(location) == State.B)
+                if (node.GetBoard().GetState(location) != State.x)
                 {
                     var tempBoard = node.GetBoard().Copy();
                     tempBoard.SetState(location, State.x);

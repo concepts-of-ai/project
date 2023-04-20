@@ -29,7 +29,7 @@ class MiniMaxOpening
         StreamWriter? writer;
         try
         {
-            writer = new StreamWriter(args[1]);
+            //writer = new StreamWriter(args[1]);
         } 
         catch (Exception) 
         {
@@ -64,10 +64,16 @@ class MiniMaxOpening
         Node root = new Node(state);
         Node tree = morrisF.GenerateMovesOpening(root, depth, true);
         tree.SetValue(MaxMin(tree));
-        Console.WriteLine(tree.GetValue());
+        //Console.WriteLine(tree.GetValue());
         Node bestChild = tree.findChildNode();
-        Console.WriteLine(bestChild.GetBoard().ToString());
-        Console.WriteLine(stateCounter);
+        // Console.WriteLine(bestChild.GetBoard().ToString());
+        // Console.WriteLine(stateCounter);
+		String output = "";
+		output += "Input State: " + root.GetBoard().ToString() + "\n";
+		output += "Output State: " + bestChild.GetBoard().ToString() +"\n";
+		output += "States evaluated by static estimation: " + stateCounter + "\n";
+		output += "MINIMAX estimate: " + root.GetValue() + "\n";
+		File.WriteAllText(args[1], output);
 
         // write output to output file
 

@@ -29,7 +29,7 @@ class ABOpening
         StreamWriter? writer;
         try
         {
-            writer = new StreamWriter(args[1]);
+            //writer = new StreamWriter(args[1]);
         } 
         catch (Exception) 
         {
@@ -68,11 +68,12 @@ class ABOpening
         Node bestChild = tree.findChildNode();
         // Console.WriteLine(bestChild.GetBoard().ToString());
         // Console.WriteLine(stateCounter);
-		String output;
+		String output = "";
 		output += "Input State: " + root.GetBoard().ToString() + "\n";
-		writer.WriteLine("Output State: " + bestChild.GetBoard().ToString());
-		writer.WriteLine("States evaluated by static estimation: " + stateCounter);
-		writer.WriteLine("MINIMAX estimate: " + root.GetValue());
+		output += "Output State: " + bestChild.GetBoard().ToString() +"\n";
+		output += "States evaluated by static estimation: " + stateCounter + "\n";
+		output += "MINIMAX estimate: " + root.GetValue() + "\n";
+		File.WriteAllText(args[1], output);
 
 
         // write output to output file
