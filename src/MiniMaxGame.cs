@@ -54,11 +54,7 @@ class MiniMaxGame
         Node tree = morrisF.GenerateMovesMidgameEndgame(root, depth, true);
 
         tree.SetValue(MaxMin(tree));
-        Console.WriteLine(tree.GetValue());
-
         Node bestChild = tree.findChildNode();
-        Console.WriteLine(bestChild.GetBoard().ToString());
-        Console.WriteLine(stateCounter);
 
         String output = "";
 		output += "Input State: " + root.GetBoard().ToString() + "\n";
