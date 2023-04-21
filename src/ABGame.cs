@@ -4,14 +4,10 @@ using System.Collections.Generic;
 
 class ABGame : ProgramEntry
 {
-    public static long stateCounter = 0;
     public static void Main(String[] args)
     {   
-        var game = new ABGame();
-        var (depth, reader) = game.SetUp(args);
-        BoardState state = game.Read(reader);
-        var (root, bestChild) = game.ComputeMinMax(state, depth, ref stateCounter);
-        game.Write(root, bestChild, args[1], ref stateCounter);
+        var program = new ABGame();
+        program.Run(args);
     }
 
     protected override (Node, Node) ComputeMinMax(BoardState state, int depth, ref long stateCounter) {

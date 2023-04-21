@@ -74,5 +74,14 @@ public abstract class ProgramEntry
         }
     }
 
+    protected void Run(String[] args) 
+    {
+        long stateCounter = 0;
+        var (depth, reader) = this.SetUp(args);
+        BoardState state = this.Read(reader);
+        var (root, bestChild) = this.ComputeMinMax(state, depth, ref stateCounter);
+        this.Write(root, bestChild, args[1], ref stateCounter);
+    }
+
     protected abstract (Node, Node) ComputeMinMax(BoardState state, int depth, ref long stateCounter);
 }
