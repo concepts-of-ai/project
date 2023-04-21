@@ -11,7 +11,7 @@ class ABGame : ProgramEntry
         var (depth, reader) = game.SetUp(args);
         BoardState state = game.Read(reader);
         var (root, bestChild) = game.ComputeMinMax(state, depth, ref stateCounter);
-        game.Write(root, bestChild, args[1], ABGame.stateCounter);
+        game.Write(root, bestChild, args[1], ref stateCounter);
     }
 
     protected override (Node, Node) ComputeMinMax(BoardState state, int depth, ref long stateCounter) {

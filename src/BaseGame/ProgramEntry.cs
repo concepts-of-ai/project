@@ -55,7 +55,7 @@ public abstract class ProgramEntry
         }
     }
 
-    protected void Write(Node root, Node bestChild, String outputFile, long stateCounter)
+    protected void Write(Node root, Node bestChild, String outputFile, ref long stateCounter)
     {
         String output = "";
         output += "Input State: " + root?.GetBoard().ToString() + "\n";
