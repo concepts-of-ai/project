@@ -144,6 +144,4 @@ public static class MiniMaxOptions
             }
         }
     }
-
-
 }
