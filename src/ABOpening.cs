@@ -4,11 +4,10 @@ using System.Collections.Generic;
 
 class ABOpening
 {
-    public static long stateCounter;
+    public static long stateCounter = 0;
 
     public static void Main(String[] args)
     {
-        stateCounter = 0;
         if (args.Length != 3)
         {
             Console.WriteLine("\n ***** Not enough input parameters -- try again.\n");

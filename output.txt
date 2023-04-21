@@ -1,4 +1,4 @@
-Input State: xxxxWxWWxxBBxBxWxWxxxxxx
-Output State: xWxxWxWWxxxBxBxxxWxxxxxx
-States evaluated by static estimation: 7253
-MINIMAX estimate: 10000
+Input State: xxxxxBxxWWWWWBBBBxxxxxxx
+Output State: xWxxxxxxxWWWWBBBBxxxxxxx
+States evaluated by static estimation: 25917
+MINIMAX estimate: 999

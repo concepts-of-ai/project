@@ -2,120 +2,26 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-class ABGame
+class ABGame : ProgramEntry
 {
-    public static long stateCounter;
-
+    public static long stateCounter = 0;
     public static void Main(String[] args)
-    {
-        stateCounter = 0;
-        if (args.Length != 3)
-        {
-            Console.WriteLine("\n ***** Not enough input parameters -- try again.\n");
-            return;
-        }
+    {   
+        var game = new ABGame();
+        var (depth, reader) = game.SetUp(args);
+        BoardState state = game.Read(reader);
+        var (root, bestChild) = game.ComputeMinMax(state, depth, ref stateCounter);
+        game.Write(root, bestChild, args[1], ABGame.stateCounter);
+    }
 
-        StreamReader? reader;
-        try
-        {
-            reader = new StreamReader(args[0]);
-        }
-        catch (Exception)
-        {
-            Console.WriteLine("\n ***** Invalid input file.\n");
-            return;
-        }
-
-        int depth;
-        try
-        {
-            depth = Int32.Parse(args[2]);
-        }
-        catch (Exception)
-        {
-            Console.WriteLine("\n ***** Invalid depth value.\n");
-            return;
-        }
-
-        // read input board from input file
-        BoardState state;
-        string? boardAsString = reader.ReadLine();
-        if (boardAsString != null && boardAsString.Length! != 0)
-        {
-            state = new BoardState(boardAsString);
-        }
-        else
-        {
-            Console.WriteLine("\n ***** Invalid input file value.\n");
-            return;
-        }
-
-        // compute minimax
+    protected override (Node, Node) ComputeMinMax(BoardState state, int depth, ref long stateCounter) {
         MorrisF morrisF = new MorrisF();
         Node root = new Node(state);
         Node tree = morrisF.GenerateMovesMidgameEndgame(root, depth, true);
 
-        tree.SetValue(MaxMin(tree, -100000, 1000000));
+        var value = MiniMaxOptions.MaxMinMidgame(tree, -100000, 1000000,  ref stateCounter);
+        tree.SetValue(value);
         Node bestChild = tree.findChildNode();
-
-        String output = "";
-        output += "Input State: " + root.GetBoard().ToString() + "\n";
-        output += "Output State: " + bestChild.GetBoard().ToString() + "\n";
-        output += "States evaluated by static estimation: " + stateCounter + "\n";
-        output += "MINIMAX estimate: " + root.GetValue() + "\n";
-
-        try
-        {
-            File.WriteAllText(args[1], output);
-        }
-        catch (Exception)
-        {
-            Console.WriteLine("\n ***** Invalid output file.\n");
-            return;
-        }
-    }
-
-    static int MaxMin(Node node, int alpha, int beta)
-    {
-        stateCounter++;
-        if (node.IsLeafNode()) return MorrisF.MidgameEndgameStaticEstimation(node);
-        else
-        {
-            var value = -100000;
-            foreach (var child in node.GetChildren())
-            {
-                value = Math.Max(value, MinMax(child, alpha, beta));
-                if (value >= beta)
-                {
-                    node.SetValue(value);
-                    return value;
-                }
-                else alpha = Math.Max(alpha, value);
-            }
-            node.SetValue(value);
-            return value;
-        }
-    }
-
-    static int MinMax(Node node, int alpha, int beta)
-    {
-        stateCounter++;
-        if (node.IsLeafNode()) return MorrisF.MidgameEndgameStaticEstimation(node);
-        else
-        {
-            var value = 100000;
-            foreach (var child in node.GetChildren())
-            {
-                value = Math.Min(value, MaxMin(child, alpha, beta));
-                if (value <= alpha)
-                {
-                    node.SetValue(value);
-                    return value;
-                }
-                else beta = Math.Min(value, beta);
-            }
-            node.SetValue(value);
-            return value;
-        }
+        return (root, bestChild);
     }
 }
