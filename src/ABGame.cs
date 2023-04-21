@@ -16,7 +16,7 @@ class ABGame : ProgramEntry
         Node root = new Node(state);
         Node tree = morrisF.GenerateMovesMidgameEndgame(root, depth, true);
 
-        var value = MiniMaxOptions.ABMaxMinMidgame(tree, -100000, 1000000, ref stateCounter, true);
+        var value = MiniMaxOptions.MaxMinMidgame(tree, ref stateCounter, true, alpha: -100000, beta: 1000000);
         tree.SetValue(value);
         Node bestChild = tree.findChildNode();
         return (root, bestChild);
