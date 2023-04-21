@@ -78,5 +78,77 @@ public static class MiniMaxOptions
         }
     }
 
+    public static int MaxMinOpening(Node node, ref long stateCounter)
+    {
+        stateCounter++;
+        if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
+        else
+        {
+            var value = -100000;
+            foreach (var child in node.GetChildren())
+            {
+                value = Math.Max(value, MinMaxOpening(child, ref stateCounter));
+            }
+            node.SetValue(value);
+            return value;
+        }
+    }
+
+    public static int MinMaxOpening(Node node, ref long stateCounter)
+    {
+        stateCounter++;
+        if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
+        else
+        {
+            var value = 100000;
+            foreach (var child in node.GetChildren())
+            {
+                value = Math.Min(value, MaxMinOpening(child, ref stateCounter));
+            }
+            node.SetValue(value);
+            return value;
+        }
+    }
+
+     public static int ABMaxMinOpening(Node node, int alpha, int beta, ref long stateCounter)
+    {
+        stateCounter++;
+        if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
+        else {
+            var value = -100000;
+            foreach (var child in node.GetChildren())
+            {
+                value = Math.Max(value, ABMinMaxOpening(child, alpha, beta, ref stateCounter));
+				if(value >= beta){
+		            node.SetValue(value);
+					return value;
+				}
+				else alpha = Math.Max(alpha, value);
+            }
+            node.SetValue(value);
+            return value;
+        }
+    }
+
+    public static int ABMinMaxOpening(Node node, int alpha, int beta, ref long stateCounter)
+    {
+        stateCounter++;
+        if (node.IsLeafNode()) return MorrisF.OpeningStaticEstimation(node);
+        else {
+            var value = 100000;
+            foreach (var child in node.GetChildren())
+            {
+                value = Math.Min(value, ABMaxMinOpening(child, alpha, beta, ref stateCounter));
+				if(value <= alpha){
+					node.SetValue(value);
+					return value;
+				}
+				else beta = Math.Min(value, beta);
+            }
+            node.SetValue(value);
+            return value;
+        }
+    }
+
     
 }
