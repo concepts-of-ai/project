@@ -22,34 +22,48 @@ public class MorrisF
         return root;
     }
 
-    public static int OpeningStaticEstimation(Node root)
+    public static int OpeningStaticEstimation(Node root, bool white)
     {
-        root.SetValue(root.GetBoard().StateCount(State.W) - root.GetBoard().StateCount(State.B));
+        if (white) root.SetValue(root.GetBoard().StateCount(State.W) - root.GetBoard().StateCount(State.B));
+        else root.SetValue(root.GetBoard().StateCount(State.B) - root.GetBoard().StateCount(State.W));
         return root.GetValue();
     }
 
 
-    public static int MidgameEndgameStaticEstimation(Node root)
+    public static int MidgameEndgameStaticEstimation(Node root, bool white)
     {
-        var numOfBlackMoves = root.Count();
-        var numOfBlackPieces = root.GetBoard().StateCount(State.B);
-        var numOfWhitePieces = root.GetBoard().StateCount(State.W);
 
-        if (numOfBlackPieces <= 2)
+
+        int numOfOpposingMoves = root.Count();
+        int numOfCurrentPieces;
+        int numOfOpposingPieces;
+
+        if (white)
+        {
+            numOfCurrentPieces = root.GetBoard().StateCount(State.W);
+            numOfOpposingPieces = root.GetBoard().StateCount(State.B);
+        }
+        else 
+        {
+            numOfCurrentPieces = root.GetBoard().StateCount(State.B);
+            numOfOpposingPieces = root.GetBoard().StateCount(State.W);
+        }
+
+        if (numOfOpposingPieces <= 2)
         {
             root.SetValue(10000);
         }
-        else if (numOfWhitePieces <= 2)
+        else if (numOfCurrentPieces <= 2)
         {
             root.SetValue(-10000);
         }
-        else if (numOfBlackMoves == 0)
+        else if (numOfOpposingMoves == 0)
         {
             root.SetValue(10000);
         }
         else
         {
-            root.SetValue(1000 * (numOfWhitePieces - numOfBlackPieces) - numOfBlackMoves);
+            root.SetValue(1000 * (numOfCurrentPieces - numOfOpposingPieces) - numOfOpposingMoves);
         }
 
         return root.GetValue();

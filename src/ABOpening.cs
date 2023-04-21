@@ -16,7 +16,7 @@ class ABOpening : ProgramEntry
         Node root = new Node(state);
         Node tree = morrisF.GenerateMovesOpening(root, depth, true);
 
-        var value = MiniMaxOptions.ABMaxMinOpening(tree, -100000, 1000000, ref stateCounter);
+        var value = MiniMaxOptions.ABMaxMinOpening(tree, -100000, 1000000, ref stateCounter, true);
         tree.SetValue(value);
         Node bestChild = tree.findChildNode();
         return (root, bestChild);

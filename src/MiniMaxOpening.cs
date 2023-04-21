@@ -16,7 +16,7 @@ class MiniMaxOpening : ProgramEntry
         Node root = new Node(state);
         Node tree = morrisF.GenerateMovesOpening(root, depth, true);
 
-        var value = MiniMaxOptions.MaxMinOpening(tree,  ref stateCounter);
+        var value = MiniMaxOptions.MaxMinOpening(tree,  ref stateCounter, true);
         tree.SetValue(value);
         Node bestChild = tree.findChildNode();
         return (root, bestChild);
