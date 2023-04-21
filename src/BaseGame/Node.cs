@@ -5,7 +5,7 @@ public class Node
 {
     List<Node> children;
     BoardState state;
-    double value = 0;
+    int value = 0;
 
     public Node(BoardState state)
     { 
@@ -38,12 +38,11 @@ public class Node
     {
         return this.children;
     }
-    public int SetValue(int value)
+    public void SetValue(int value)
     {
         this.value = value;
-        return value;
     }
-    public double GetValue()
+    public int GetValue()
     {
         return this.value;
     }

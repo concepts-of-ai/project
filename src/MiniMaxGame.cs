@@ -71,6 +71,11 @@ class MiniMaxGame
             Console.WriteLine("\n ***** Invalid output file.\n");
             return;
         }
+    	Node nextChild = bestChild.findChildNode();
+	    List<Node> children = bestChild.GetChildren();
+	    foreach(var child in children){
+	    	Console.WriteLine(child.GetBoard().ToString());
+    	}
     }
 
     static int MaxMin(Node node)
@@ -78,7 +83,7 @@ class MiniMaxGame
         stateCounter++;
         if (node.IsLeafNode()) return MorrisF.MidgameEndgameStaticEstimation(node);
         else {
-            var value = -100000;
+            int value = -100000;
             foreach (var child in node.GetChildren())
             {
                 value = Math.Max(value, MinMax(child));
@@ -93,7 +98,7 @@ class MiniMaxGame
         stateCounter++;
         if (node.IsLeafNode()) return MorrisF.MidgameEndgameStaticEstimation(node);
         else {
-            var value = 100000;
+            int value = 100000;
             foreach (var child in node.GetChildren())
             {
                 value = Math.Min(value, MaxMin(child));

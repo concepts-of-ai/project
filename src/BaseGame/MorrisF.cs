@@ -24,8 +24,8 @@ public class MorrisF
 
     public static int OpeningStaticEstimation(Node root)
     {
-        var value = root.GetBoard().StateCount(State.W) - root.GetBoard().StateCount(State.B);
-        return root.SetValue(value);
+        root.SetValue(root.GetBoard().StateCount(State.W) - root.GetBoard().StateCount(State.B));
+        return root.GetValue();
     }
 
 
@@ -35,10 +35,17 @@ public class MorrisF
         var numOfBlackPieces = root.GetBoard().StateCount(State.B);
         var numOfWhitePieces = root.GetBoard().StateCount(State.W);
 
-        if (numOfBlackPieces <= 2) return root.SetValue(10000);
-        else if (numOfWhitePieces <= 2) return root.SetValue(-10000);
-        else if (numOfBlackMoves == 0) return root.SetValue(10000);
-        else return root.SetValue(1000 * (numOfWhitePieces - numOfBlackPieces) - numOfBlackMoves);
+        if (numOfBlackPieces <= 2){
+            root.SetValue(10000);
+        }
+        else if (numOfWhitePieces <= 2){
+            root.SetValue(-10000);
+        }
+        else if (numOfBlackMoves == 0){
+            root.SetValue(10000);
+        }
+        else root.SetValue(1000 * (numOfWhitePieces - numOfBlackPieces) - numOfBlackMoves);
+        return root.GetValue();
     }
 
     private void GenerateAdd(Node node, int depth, bool white)
@@ -57,15 +64,23 @@ public class MorrisF
                 Node tempNode = new Node(tempBoard);
                 if (CloseMill(location, tempBoard)) 
                 {
-                    GenerateRemove(node, tempNode, depth, white, () => GenerateMovesOpening(node, depth - 1, !white));
+                    var newChildren = GenerateRemove(node, tempNode, depth, white, () => GenerateMovesOpening(node, depth - 1, !white));
+                    foreach(var child in newChildren){
+                        node.AddChild(child);
+                        //GenerateMovesOpening(child, depth - 1, !white);
+                    }
                 }
                 else
                 {
                     node.AddChild(tempNode);
                     //Console.WriteLine(tempNode.GetBoard().ToString());
+                    //GenerateMovesOpening(tempNode, depth - 1, !white);
                 }
-                GenerateMovesOpening(tempNode, depth - 1, !white);
             }
+        }
+        List<Node> children = node.GetChildren();
+        foreach(var child in children){
+            GenerateMovesOpening(child, depth - 1, !white);
         }
     }
 
@@ -92,10 +107,16 @@ public class MorrisF
                         var tempNode = new Node(tempBoard);
                         if (CloseMill(position, tempBoard))
                         {
-                            GenerateRemove(node, tempNode, depth, white, () => GenerateMovesMidgameEndgame(node, depth - 1, !white));
+                            var newChildren = GenerateRemove(node, tempNode, depth, white, () => GenerateMovesMidgameEndgame(node, depth - 1, !white));
+                            foreach(var child in newChildren){
+                                node.AddChild(child);
+                                GenerateMovesMidgameEndgame(child, depth - 1, !white);
+                            }
                         }
-                        else node.AddChild(tempNode);
-                        GenerateMovesMidgameEndgame(node, depth - 1, !white);
+                        else {
+                            node.AddChild(tempNode);
+                            GenerateMovesMidgameEndgame(node, depth - 1, !white);
+                        }
                     }
                 }
             }
@@ -124,22 +145,29 @@ public class MorrisF
                         var tempNode = new Node(tempBoard);
                         if (CloseMill(location2, tempBoard)) 
                         { 
-                            GenerateRemove(node, tempNode, depth, white, () => GenerateMovesMidgameEndgame(node, depth - 1, !white)); 
+                            var newChildren = GenerateRemove(node, tempNode, depth, white, () => GenerateMovesMidgameEndgame(node, depth - 1, !white));
+                            foreach(var child in newChildren){
+                                node.AddChild(child);
+                                GenerateMovesMidgameEndgame(child, depth - 1, !white);
+                            }                        
                         }
-                        else node.AddChild(tempNode);
-                        GenerateMovesMidgameEndgame(node, depth - 1, !white);
+                        else{ 
+                            node.AddChild(tempNode);
+                            GenerateMovesMidgameEndgame(node, depth - 1, !white);
+                            }
                     }
                 }
             }
         }
     }
 
-    private void GenerateRemove(Node root, Node node, int depth, bool white, System.Action callBack)
+    private List<Node> GenerateRemove(Node root, Node node, int depth, bool white, System.Action callBack)
     {
         State stateToRemove;
         if (white) stateToRemove = State.B;
         else stateToRemove = State.W;
 
+        List<Node> newStates = new List<Node>();
         var length = node.Count();
         for (int location = 0; location < NumberOfPositions; location++)
         {
@@ -151,12 +179,13 @@ public class MorrisF
                     tempBoard.SetState(location, State.x);
                     //Console.WriteLine("======= " + tempBoard.ToString());
                     var tempNode = new Node(tempBoard);
-                    root.AddChild(tempNode);
-                    callBack();
+                    //root.AddChild(tempNode);
+                    //callBack();
+                    newStates.Add(tempNode);
                 }
             }
         }
-        if (node.Count() == length)
+        if (newStates.Count == 0)
         {
             for (int location = 0; location < NumberOfPositions; location++)
             {
@@ -165,12 +194,13 @@ public class MorrisF
                     var tempBoard = node.GetBoard().Copy();
                     tempBoard.SetState(location, State.x);
                     var tempNode = new Node(tempBoard);
-                    root.AddChild(tempNode);
-                    callBack();
+                    //root.AddChild(tempNode);
+                    //callBack();
+                    newStates.Add(tempNode);
                 }
             }
         }
-
+        return newStates;
     }
 
     private List<int> Neighbors(int location)

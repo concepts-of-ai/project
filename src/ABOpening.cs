@@ -71,6 +71,11 @@ class ABOpening
             Console.WriteLine("\n ***** Invalid output file.\n");
             return;
         }
+	// 	Node nextChild = bestChild.findChildNode();
+	// List<Node> children = root.GetChildren();
+	// foreach(var child in children){
+	// 	Console.WriteLine(child.GetBoard().ToString());
+	// }
     }
 
     static int MaxMin(Node node, int alpha, int beta)
