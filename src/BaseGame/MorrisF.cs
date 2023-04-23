@@ -33,7 +33,6 @@ public class MorrisF
     public static int MidgameEndgameStaticEstimation(Node root, bool white)
     {
 
-
         int numOfOpposingMoves = root.Count();
         int numOfCurrentPieces;
         int numOfOpposingPieces;

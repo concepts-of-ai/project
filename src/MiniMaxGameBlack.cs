@@ -21,7 +21,6 @@ class MiniMaxGameBlack : ProgramEntry
         Node bestChild = tree.findChildNode();
         return (root, bestChild);
     }
-
 }
 
 // needs to be tested

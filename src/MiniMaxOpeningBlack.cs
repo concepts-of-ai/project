@@ -6,8 +6,8 @@ class MiniMaxOpeningBlack : ProgramEntry
 {
     public static void Main(String[] args)
     {
-       var game = new MiniMaxOpeningBlack();
-       game.Run(args);
+        var game = new MiniMaxOpeningBlack();
+        game.Run(args);
     }
 
     protected override (Node, Node) ComputeMinMax(BoardState state, int depth, ref long stateCounter)

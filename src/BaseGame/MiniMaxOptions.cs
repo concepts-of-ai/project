@@ -36,8 +36,6 @@ public static class MiniMaxOptions
                 return value;
             }
         }
-
-
     }
 
     public static int MinMaxMidgame(Node node, ref long stateCounter, bool white, int? alpha = null, int? beta = null)
